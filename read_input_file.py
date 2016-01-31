@@ -35,3 +35,5 @@ def load_configuration(config_file):
                 a_map.append(list(izip(*[iter(get_line(f.next()))]*2)))
             A_MAP.append(a_map)
         config['a_map'] = A_MAP
+
+        return config
