@@ -3,16 +3,15 @@ from balloon import Balloon
 
 
 def evaluate_output(config, output_file):
-    T = config['T']
     balloons = [Balloon(index, config) for index in range(config['B'])]
     final_score = 0
     with open(output_file, 'r') as f:
         lines = f.readlines()
-        for turn in range(T):
+        for turn in range(config['T']):
             turn_score = 0
             line = lines[turn]
             for idx, level in enumerate(read_input_file.get_line(line)):
-                balloons[idx].level = level
+                balloons[idx].level += level
             for balloon in balloons:
                 if not balloon.lost and balloon.level > 0:
                     wind = config['a_map'][balloon.level - 1][balloon.current_cell[0]][balloon.current_cell[1]]
