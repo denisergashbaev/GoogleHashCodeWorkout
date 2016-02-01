@@ -15,6 +15,6 @@ def select_targets(config):
 def assign_balloons(config, target_cells):
     balloons = []
     for i in range(config['B']):
-        balloon = Balloon(i, target_cells[i % len(target_cells)])
+        balloon = Balloon(i, config, target_cells[i % len(target_cells)])
         balloons.append(balloon)
     return balloons
