@@ -12,8 +12,8 @@ class Balloon(object):
 
     def apply_wind(self, wind):
         if not self.lost:
-            self.current_cell = ((self.current_cell[0] + wind[0]) % self.config['R'], self.current_cell[1] + wind[1])
-            self.lost = not (0 <= self.current_cell[1] < self.config['C'])
+            self.current_cell = (self.current_cell[0] + wind[0], (self.current_cell[1] + wind[1]) % self.config['C'])
+            self.lost = not (0 <= self.current_cell[0] < self.config['R'])
 
     def calc_targets_covered(self):
         targ_covered_count = 0
