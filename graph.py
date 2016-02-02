@@ -55,3 +55,24 @@ class Graph(object):
     def get_edge(self, orig, dest):
         return self.vertices['<Vertex orig=%r,dest=%r>' % (orig, dest)]
 
+
+def movement(orig, vel):
+    next_r = 0  # TODO
+    next_c = 0  # TODO
+    return Cell(row=next_r, col=next_c)
+
+
+def construct_graph(config):
+    edges = []
+    for a in range(config['A']):
+        for r in range(config['R']):
+            for c in range(config['C']):
+                cell_orig = Cell(row=r, col=c)
+                wind_velocity = config['a_map'][a][r][c]
+                cell_dest = movement(orig=cell_orig, vel=wind_velocity)
+
+                v_orig = Vertex(cell=cell_orig, alt=a)
+                v_dest = Vertex(cell=cell_dest, alt=a)
+                edges.append(Edge(v_orig, v_dest))
+
+    return Graph(edges=edges)
