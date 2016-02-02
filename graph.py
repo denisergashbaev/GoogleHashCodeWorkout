@@ -56,9 +56,9 @@ class Graph(object):
         return self.vertices['<Vertex orig=%r,dest=%r>' % (orig, dest)]
 
 
-def movement(orig, vel):
-    next_r = 0  # TODO
-    next_c = 0  # TODO
+def movement(orig, vel, num_cols):
+    next_r = orig[0] + vel[0]
+    next_c = (orig[1] + vel[1]) % num_cols
     return Cell(row=next_r, col=next_c)
 
 
@@ -69,7 +69,7 @@ def construct_graph(config):
             for c in range(config['C']):
                 cell_orig = Cell(row=r, col=c)
                 wind_velocity = config['a_map'][a][r][c]
-                cell_dest = movement(orig=cell_orig, vel=wind_velocity)
+                cell_dest = movement(orig=cell_orig, vel=wind_velocity, num_cols=config['C'])
 
                 v_orig = Vertex(cell=cell_orig, alt=a)
                 v_dest = Vertex(cell=cell_dest, alt=a)
