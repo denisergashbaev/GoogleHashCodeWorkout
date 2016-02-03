@@ -25,15 +25,15 @@ class Graph(object):
         self.vertices = {}
         self.edges = {}
         for e in edges:
-            if '<Vertex cell=<Cell col=%r,row=%r>,alt=%r>' % (e[0][0], e[0][1], e[0][2]) not in self.vertices:
-                orig = Vertex(cell=Cell(col=e[0][0], row=e[0][1]), alt=e[0][2])
+            if '<Vertex cell=<Cell col=%r,row=%r>,alt=%r>' % (e.dest.cell.col, e.dest.cell.row, e.dest.alt) not in self.vertices:
+                dest = Vertex(cell=Cell(col=e.dest.cell.col, row=e.dest.cell.row), alt=e.dest.alt)
             else:
-                orig = self.get_vertex(col=e[0][0], row=e[0][1], alt=e[0][2])
+                dest = self.get_vertex(col=e.dest.cell.col, row=e.dest.cell.row, alt=e.dest.alt)
 
-            if '<Vertex cell=<Cell col=%r,row=%r>,alt=%r>' % (e[1][0], e[1][1], e[1][2]) not in self.vertices:
-                dest = Vertex(cell=Cell(col=e[1][0], row=e[1][1]), alt=e[1][2])
+            if '<Vertex cell=<Cell col=%r,row=%r>,alt=%r>' % (e.orig.cell.col, e.orig.cell.row, e.orig.alt) not in self.vertices:
+                orig = Vertex(cell=Cell(col=e.orig.cell.col, row=e.orig.cell.row), alt=e.orig.alt)
             else:
-                dest = self.get_vertex(col=e[1][0], row=e[1][1], alt=e[1][2])
+                orig = self.get_vertex(col=e.orig.cell.col, row=e.orig.cell.row, alt=e.orig.alt)
 
             self.add_edge(orig=orig, dest=dest)
 
@@ -56,23 +56,33 @@ class Graph(object):
         return self.vertices['<Vertex orig=%r,dest=%r>' % (orig, dest)]
 
 
-def movement(orig, vel, num_cols):
-    next_r = orig[0] + vel[0]
-    next_c = (orig[1] + vel[1]) % num_cols
+def movement(row_orig, col_orig, vel, num_cols):
+    next_r = row_orig + vel[0]
+    next_c = (col_orig + vel[1]) % num_cols
     return Cell(row=next_r, col=next_c)
 
 
 def construct_graph(config):
     edges = []
-    for a in range(config['A']):
-        for r in range(config['R']):
-            for c in range(config['C']):
-                cell_orig = Cell(row=r, col=c)
-                wind_velocity = config['a_map'][a][r][c]
-                cell_dest = movement(orig=cell_orig, vel=wind_velocity, num_cols=config['C'])
+    for a in range(config['A']):  # For all high levels
 
-                v_orig = Vertex(cell=cell_orig, alt=a)
-                v_dest = Vertex(cell=cell_dest, alt=a)
-                edges.append(Edge(v_orig, v_dest))
+        for r in range(config['R']):  # For all rows
+
+            for c in range(config['C']):  # For all columns
+
+                for possible_level in range(max(a-1, 1), min(a+2, config['A'])):  # For all high levels the balloon can move
+
+                    wind_velocity = config['a_map'][possible_level][r][c]
+                    cell_dest = movement(row_orig=r, col_orig=c, vel=wind_velocity, num_cols=config['C'])
+
+                    # Check if destiny cell is out of range
+                    if 0 <= cell_dest.row < config['R']:
+                        cell_orig = Cell(row=r, col=c)
+                    else:
+                        continue
+
+                    v_orig = Vertex(cell=cell_orig, alt=a)
+                    v_dest = Vertex(cell=cell_dest, alt=possible_level)
+                    edges.append(Edge(v_orig, v_dest))
 
     return Graph(edges=edges)
