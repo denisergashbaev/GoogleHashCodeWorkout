@@ -7,11 +7,12 @@ class Balloon(object):
         self.config = config
         self.current_cell = config['start_cell']
         self.target_cell = target_cell
-        self.level = 0
+        self.alt = 0
         self.lost = False
 
-    def apply_wind(self, wind):
+    def apply_wind(self):
         if not self.lost:
+            wind = self.config['a_map'][self.alt - 1][self.current_cell[0]][self.current_cell[1]]
             self.current_cell = (self.current_cell[0] + wind[0], (self.current_cell[1] + wind[1]) % self.config['C'])
             self.lost = not (0 <= self.current_cell[0] < self.config['R'])
 
@@ -27,5 +28,5 @@ class Balloon(object):
         return min(math.fabs(c1-c2), self.config['C'] - math.fabs(c1-c2))
 
     def __repr__(self):
-        return '<Balloon-%r: current_cell=%r,level=%s,target_cell=%r,lost=%s>' % \
-               (self.index, self.current_cell, self.level, self.target_cell, self.lost)
+        return '<Balloon-%r: current_cell=%r,alt=%s,target_cell=%r,lost=%r>' % \
+               (self.index, self.current_cell, self.alt, self.target_cell, self.lost)

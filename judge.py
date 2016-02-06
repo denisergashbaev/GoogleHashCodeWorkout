@@ -10,12 +10,11 @@ def evaluate_output(config, output_file):
         for turn in range(config['T']):
             turn_score = 0
             line = lines[turn]
-            for idx, level in enumerate(read_input_file.get_line(line)):
-                balloons[idx].level += level
+            for idx, alt in enumerate(read_input_file.get_line(line)):
+                balloons[idx].alt += alt
             for balloon in balloons:
-                if not balloon.lost and balloon.level > 0:
-                    wind = config['a_map'][balloon.level - 1][balloon.current_cell[0]][balloon.current_cell[1]]
-                    balloon.apply_wind(wind)
+                if not balloon.lost and balloon.alt > 0:
+                    balloon.apply_wind()
                     turn_score += balloon.calc_targets_covered()
             print "%s points at the end of turn %s" % (turn_score, turn)
             final_score += turn_score

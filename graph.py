@@ -75,7 +75,7 @@ def construct_graph(config):
                     wind_velocity = config['a_map'][possible_level][r][c]
                     cell_dest = movement(row_orig=r, col_orig=c, vel=wind_velocity, num_cols=config['C'])
 
-                    # Check if destiny cell is out of range
+                    # Check if destination cell is out of range
                     if 0 <= cell_dest.row < config['R']:
                         cell_orig = Cell(row=r, col=c)
                     else:
