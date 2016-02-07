@@ -25,16 +25,14 @@ class Graph2(object):
 
         A = config['A']
         for a in range(A):  # For all height levels
-            self.add_vertices(a, max(a-1, 1), min(a+2, A))
-
-    def add_vertices(self, a, next_a_min, next_a_max):
-        for r in range(self.config['R']):  # For all rows
-            for c in range(self.config['C']):  # For all columns
-                vertex_orig = Vertex2(Cell(r, c), a)
-                for next_a in range(next_a_min, next_a_max):  # For all height levels the balloon can move
-                    vertex_dest = self._movement(vertex_orig, next_a)
-                    if vertex_dest:
-                        self.add_edge(vertex_orig, vertex_dest)
+            next_a_min, next_a_max = max(a-1, 1), min(a+2, A)
+            for r in range(self.config['R']):  # For all rows
+                for c in range(self.config['C']):  # For all columns
+                    vertex_orig = Vertex2(Cell(r, c), a)
+                    for next_a in range(next_a_min, next_a_max):  # For all height levels the balloon can move
+                        vertex_dest = self._movement(vertex_orig, next_a)
+                        if vertex_dest:
+                            self._add_edge(vertex_orig, vertex_dest)
 
     def _movement(self, vertex_orig, next_a):
         vel = self.config['a_map'][next_a - 1][vertex_orig.cell.row][vertex_orig.cell.col]
@@ -46,14 +44,15 @@ class Graph2(object):
             vertex_dest = Vertex2(Cell(next_r, next_c), next_a)
         return vertex_dest
 
-    def add_edge(self, v, w):
-        self._initialize(v)
-        self.g[v].add(w)
-
-    def adj(self, v):
-        self._initialize(v)
+    def _init_and_get(self, v):
+        try:
+            return self.g[v]
+        except KeyError:
+             self.g[v] = set()
         return self.g[v]
 
-    def _initialize(self, v):
-        if v not in self.g:
-            self.g[v] = set()
+    def _add_edge(self, v, w):
+        self._init_and_get(v).add(w)
+
+    def adj(self, v):
+        return self._init_and_get(v)

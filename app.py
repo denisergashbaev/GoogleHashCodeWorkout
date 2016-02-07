@@ -13,7 +13,7 @@ balloons = balloon_manager.assign_balloons(config, selected_targets)
 
 g = Graph2(config)
 
-if False:
+if True:
     for r in range(config['R']):  # For all rows
         for c in range(config['C']):  # For all columns
             v = Vertex2(Cell(r, c), 2)
