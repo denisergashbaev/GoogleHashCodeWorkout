@@ -13,7 +13,7 @@ dfs = DFS(g, config)
 for balloon in balloons:
     target_vertex = Vertex2(balloon.target_cell, 1)
     dfs.search(dfs.start_vertex, target_vertex)
-    print "target_vertex: %s" % target_vertex
+    print "start_vertex: %s, target_vertex: %s" % (dfs.start_vertex, target_vertex)
     print "path found: %s" % dfs.path_found
     print "path: %s" % dfs.get_path(target_vertex)
 
