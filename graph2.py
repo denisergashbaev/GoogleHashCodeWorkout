@@ -13,7 +13,6 @@ class Vertex2(object):
     def __eq__(self, other):
         return (self.cell, self.alt) == (other.cell, other.alt)
 
-
     def __repr__(self):
         return '<Vertex cell=%r,alt=%r>' % (self.cell, self.alt)
 
@@ -48,7 +47,7 @@ class Graph2(object):
         try:
             return self.g[v]
         except KeyError:
-             self.g[v] = set()
+            self.g[v] = set()
         return self.g[v]
 
     def _add_edge(self, v, w):
