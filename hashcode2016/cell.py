@@ -3,6 +3,8 @@ class Cell(object):
         self.row = row
         self.col = col
         self.marked = marked
+        self.color = None
+        self.parent_color = None
 
     #http://stackoverflow.com/questions/4901815/object-of-custom-type-as-dictionary-key
     def __hash__(self):

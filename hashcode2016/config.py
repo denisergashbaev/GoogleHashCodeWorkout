@@ -14,3 +14,11 @@ class Config(object):
                     cell = Cell(row_index, col_index, c == '#')
                     row.append(cell)
                 self.grid.append(row)
+
+    def get_marked_neighbours(self, row, col):
+        neigbours_list = []
+        for r in range(max(row-1, 0), min(row+2, self.rows), 2):
+            for c in range(max(col-1, 0), min(col+2, self.cols), 2):
+                if self.grid[r][c].marked and self.grid[r][c].color is not None:
+                    neigbours_list.append(self.grid[r][c])
+        return neigbours_list
